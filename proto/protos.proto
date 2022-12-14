@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package protos;
+
+// Defining message for Book field
+message Book {
+
+  // ISBN for book acting as primary key
+  string ISBN = 1;
+
+  // Title for the book
+  string title = 2;
+
+  // Author of the book
+  string author = 3;
+
+  // Defining enum for genre of books
+  enum Genre {
+    UNKNOWN = 0;
+    FICTION = 1;
+    NON_FICTION = 2;
+    POETRY = 3;
+  }
+  Genre genre = 4;
+
+  // Publishing year of the book
+  int32 publishing_year = 5;
+}
+
+
+// Defining inventory item 
+message InventoryItem {
+  // Primary key for inventory item
+  int32 inventory_number = 1;
+
+  // A oneof field that can only refer to a Book object
+  oneof item {
+    Book book = 2;
+  }
+
+  // Enum for different status of inventory item
+  enum Status {
+    UNKNOWN = 0;
+    AVAILABLE = 1;
+    TAKEN = 2;
+  }
+  Status status = 3;
+}
+
+// Message for book request object
+message BookRequest {
+  string ISBNTOFIND = 1;
+}
+
+// Message for response of book creation
+message CreateBookResponse {
+  string message = 1;
+}
+
+// Services of inventory
+service InventoryService {
+  // Service to create a book
+  rpc CreateBook(Book) returns (CreateBookResponse);
+  // Service to fetch a book based on ISBN
+  rpc GetBook(BookRequest) returns (Book);
+}
